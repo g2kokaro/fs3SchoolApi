@@ -1,4 +1,5 @@
 database.sqlite
+dummyData.sql
 
 # Logs
 logs
