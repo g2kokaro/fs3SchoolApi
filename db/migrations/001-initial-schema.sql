@@ -16,10 +16,10 @@ CREATE TABLE classes (
   code TEXT,
   name TEXT,
   teacher_id INTEGER,
-  startDate: TEXT,
-  endDate: TEXT,
+  startDate TEXT,
+  endDate TEXT,
   CONSTRAINT classes_fk_teacher_id 
-    FOREIGN KEY REFERENCES teachers (id)
+    FOREIGN KEY (teacher_id) REFERENCES teachers(id)
     ON UPDATE CASCADE
 );
 
@@ -27,10 +27,10 @@ CREATE TABLE student_classes (
   class_id INTEGER,
   student_id INTEGER,
   CONSTRAINT student_classes_fk_class_id
-    FOREIGN KEY REFERENCES classes (id)
+    FOREIGN KEY (class_id) REFERENCES classes(id)
     ON UPDATE CASCADE ON DELETE CASCADE,
   CONSTRAINT student_classes_fk_student_id
-    FOREIGN KEY REFERENCES students(id)
+    FOREIGN KEY (student_id) REFERENCES students(id)
     ON UPDATE CASCADE ON DELETE CASCADE
 )
 
