@@ -1,10 +1,6 @@
 const classesRoutes = require('express').Router()
+import classesController from '../../controllers/classes'
 
-classesRoutes.get('/', (req, res) => {
-  const classes = 'Classes data'
-  res.status(200).json({
-    classes
-  })
-})
+classesRoutes.get('/', classesController.list)
 
-export default classesRoutes;
+export default classesRoutes
