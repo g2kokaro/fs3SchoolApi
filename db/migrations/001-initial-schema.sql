@@ -1,14 +1,14 @@
 -- Up
 CREATE TABLE students (
   id INTEGER PRIMARY KEY,
-  firstname TEXT,
-  lastname TEXT
+  first_name TEXT,
+  last_name TEXT
 );
 
 CREATE TABLE teachers (
   id INTEGER PRIMARY KEY,
-  firstname TEXT,
-  lastname TEXT
+  first_name TEXT,
+  last_name TEXT
 );
 
 CREATE TABLE classes (
@@ -16,8 +16,8 @@ CREATE TABLE classes (
   code TEXT,
   name TEXT,
   teacher_id INTEGER,
-  startDate TEXT,
-  endDate TEXT,
+  start_date TEXT,
+  end_date TEXT,
   CONSTRAINT classes_fk_teacher_id 
     FOREIGN KEY (teacher_id) REFERENCES teachers(id)
     ON UPDATE CASCADE
@@ -32,7 +32,22 @@ CREATE TABLE student_classes (
   CONSTRAINT student_classes_fk_student_id
     FOREIGN KEY (student_id) REFERENCES students(id)
     ON UPDATE CASCADE ON DELETE CASCADE
-)
+);
+
+insert into teachers (first_name, last_name) values 
+  ('David the Dementor', 'Krett');
+
+insert into teachers (first_name, last_name) values ('Tim', 'Williams');
+
+insert into classes (code, name, teacher_id, start_date, end_date) values 
+  ('BCDV1006', 'Full Stack Development I', 1, '2019-01-01', '2019-01-31');
+
+insert into classes (code, name, teacher_id, start_date, end_date) values 
+  ('BCDV1007', 'Full Stack Development II', 2, '2019-02-01', '2019-02-28');
+
+insert into classes (code, name, teacher_id, start_date, end_date) values 
+  ('BCDV1008', 'Full Stack Development III', 1, '2019-03-01', '2019-03-31');
+
 
 -- Down
 DROP TABLE students;

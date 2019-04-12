@@ -1,10 +1,45 @@
 import classesModel from '../models/classes'
 
 export default {
-  list: async (req, res, next) => {
+  getAll: async (req, res, next) => {
     try {
-      const classes = await classesModel.list(next)
+      const classes = await classesModel.getAll(next)
       res.status(200).json({ classes })
+    } catch (err) {
+      next(err)
+    }
+  },
+  getById: async (req, res, next) => {
+    const classId = req.params.id * 1
+    try {
+      const c1ass = await classesModel.getById(classId, next)
+      if (c1ass) {
+        res.status(200).json({ c1ass })
+      } else {
+        res.status(404).send({
+          error: `Class ${classId} not found`
+        })
+      }
+    } catch (err) {
+      next(err)
+    }
+  },
+  create: async (req, res, next) => {
+    const c = {
+      ...req.body
+    }
+    try {
+      if (c.code && c.name && c.teacher_id && c.start_date && c.end_date) {
+        const dbReturnVal = await classesModel.create(c, next)
+        if (dbReturnVal.stmt.lastID) {
+          let newClass = await classesModel.getById(dbReturnVal.stmt.lastID, next)
+          res.status(201).json(newClass)
+        }
+      } else {
+        res.status(422).send({
+          error: `Failed to create class. Was the data sent valid?`
+        })
+      }
     } catch (err) {
       next(err)
     }
