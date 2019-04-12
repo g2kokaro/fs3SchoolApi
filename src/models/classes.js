@@ -24,6 +24,10 @@ export default {
   create: async (c, next) => {
     try {
       const db = getDb()
+      let existingClass = await db.get(SQL`SELECT * FROM classes WHERE code = ${c.code}`)
+      if(existingClass) {
+        return -1
+      }
       return await db.run(SQL`INSERT INTO classes 
         (code, name, teacher_id, start_date, end_date)
       VALUES(${c.code}, ${c.name}, ${c.teacher_id}, ${c.start_date}, ${c.end_date})`)

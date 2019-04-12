@@ -31,13 +31,17 @@ export default {
     try {
       if (c.code && c.name && c.teacher_id && c.start_date && c.end_date) {
         const dbReturnVal = await classesModel.create(c, next)
-        if (dbReturnVal.stmt.lastID) {
+        if (dbReturnVal != -1) {
           let newClass = await classesModel.getById(dbReturnVal.stmt.lastID, next)
           res.status(201).json(newClass)
+        } else {
+          res.status(400).send({
+            error: `Failed to create class. Class already exists.`
+          })
         }
       } else {
-        res.status(422).send({
-          error: `Failed to create class. Was the data sent valid?`
+        res.status(400).send({
+          error: `Failed to create class. Invalid class format.`
         })
       }
     } catch (err) {
