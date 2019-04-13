@@ -4,7 +4,7 @@ export default {
   getAll: async (req, res, next) => {
     try {
       const classes = await classesModel.getAll(next)
-      res.status(200).json({ classes })
+      res.status(200).json(classes)
     } catch (err) {
       next(err)
     }
@@ -14,7 +14,7 @@ export default {
     try {
       const c1ass = await classesModel.getById(classId, next)
       if (c1ass) {
-        res.status(200).json({ c1ass })
+        res.status(200).json(c1ass)
       } else {
         res.status(404).send({
           error: `Class ${classId} not found`
@@ -29,23 +29,36 @@ export default {
       ...req.body
     }
     try {
-      if (c.code && c.name && c.teacher_id && c.start_date && c.end_date) {
-        const dbReturnVal = await classesModel.create(c, next)
-        if (dbReturnVal != -1) {
-          let newClass = await classesModel.getById(dbReturnVal.stmt.lastID, next)
-          res.status(201).json(newClass)
-        } else {
-          res.status(400).send({
-            error: `Failed to create class. Class already exists.`
-          })
-        }
+      const dbReturnVal = await classesModel.create(c, next)
+      if (typeof (dbReturnVal) === 'object') {
+        let newClass = await classesModel.getById(dbReturnVal.stmt.lastID, next)
+        res.status(201).json(newClass)
       } else {
         res.status(400).send({
-          error: `Failed to create class. Invalid class format.`
+          error: dbReturnVal
         })
       }
     } catch (err) {
       next(err)
     }
-  }
+  },
+  update: async (req, res, next) => {
+    const classId = req.params.id * 1
+    const c = {
+      ...req.body
+    }
+    try {
+      const dbReturnVal = await classesModel.update(c, classId, next)
+      if (typeof (dbReturnVal) === 'object') {
+        let newClass = await classesModel.getById(classId, next)
+        res.status(201).json(newClass)
+      } else {
+        res.status(400).send({
+          error: dbReturnVal
+        })
+      }
+    } catch (err) {
+      next(err)
+    }
+  },
 }
