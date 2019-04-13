@@ -1,10 +1,9 @@
 import express from 'express'
 import classes from './classes'
+import students from './students'
 const router = express.Router()
 
 router.use('/classes', classes)
-
-// We can add routes for other resources here later
-// by adding other folders to the routes folder
+router.use('/students', students)
 
 export default router

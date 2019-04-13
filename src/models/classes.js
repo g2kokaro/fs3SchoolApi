@@ -45,7 +45,7 @@ export default {
   update: async (c, classId, next) => {
     try {
       if (!(c.code || c.name || c.teacher_id || c.start_date || c.end_date)) {
-        return `Failed to update class. Invalid class format.`
+        return `Failed to update class. Invalid format.`
       }
       const db = getDb()
       let existingClass = await db.get(
@@ -53,12 +53,16 @@ export default {
       if (!existingClass) {
         return `Failed to update class. Class does not exist.`
       }
-      let dbStatement = `UPDATE classes SET `
+      let dbStatement = SQL`UPDATE classes SET `
+      let keyValueString = ''
       for (let [key, value] of Object.entries(c)) {
-        dbStatement += `'${key}' = '${value}', `
+        if (['code', 'name', 'teacher_id', 'start_date', 'end_date'].indexOf(key) > -1) {
+          keyValueString += `'${key}' = '${value}', `
+        }
       }
-      dbStatement = dbStatement.slice(0, -2)
-      dbStatement += ` WHERE id = ${classId}`
+      keyValueString = keyValueString.slice(0, -2)
+      dbStatement.append(keyValueString)
+      dbStatement.append(SQL` WHERE id = ${classId}`)
       return await db.run(dbStatement)
     } catch (err) {
       next(err)

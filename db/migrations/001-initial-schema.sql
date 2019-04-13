@@ -48,6 +48,18 @@ insert into classes (code, name, teacher_id, start_date, end_date) values
 insert into classes (code, name, teacher_id, start_date, end_date) values 
   ('BCDV1008', 'Full Stack Development III', 1, '2019-03-01', '2019-03-31');
 
+insert into students (first_name, last_name) values ('Dima', 'Kokarovtsev');
+insert into students (first_name, last_name) values ('Student', 'Two');
+insert into students (first_name, last_name) values ('Classmate', 'Three');
+
+insert into student_classes values (1, 1);
+insert into student_classes values (2, 1);
+insert into student_classes values (3, 1);
+insert into student_classes values (2, 2);
+insert into student_classes values (2, 3);
+insert into student_classes values (3, 3);
+
+
 
 -- Down
 DROP TABLE students;
