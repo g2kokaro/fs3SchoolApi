@@ -17,7 +17,7 @@ export default {
         SQL`SELECT c.id, c.name, c.code, c.teacher_id, t.first_name, 
         t.last_name, c.start_date, c.end_date 
         FROM classes AS c INNER JOIN teachers AS t ON
-        c.teacher_id = t.id WHERE c.id=${classId}`
+        c.teacher_id = t.id WHERE c.id = ${classId}`
       )
     } catch (err) {
       next(err)
@@ -60,6 +60,16 @@ export default {
       dbStatement = dbStatement.slice(0, -2)
       dbStatement += ` WHERE id = ${classId}`
       return await db.run(dbStatement)
+    } catch (err) {
+      next(err)
+    }
+  },
+  delete: async (classId, next) => {
+    try {
+      const db = getDb()
+      return await db.run(
+        SQL`DELETE FROM classes WHERE id = ${classId}`
+      )
     } catch (err) {
       next(err)
     }

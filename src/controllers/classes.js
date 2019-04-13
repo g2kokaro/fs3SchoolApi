@@ -61,4 +61,19 @@ export default {
       next(err)
     }
   },
+  delete: async (req, res, next) => {
+    const classId = req.params.id * 1
+    try {
+      const c1ass = await classesModel.delete(classId, next)
+      if (c1ass.stmt.changes) {
+        res.status(200).json({ message: `Class ${classId} removed.` })
+      } else {
+        res.status(404).send({
+          error: `Class ${classId} not found`
+        })
+      }
+    } catch (err) {
+      next(err)
+    }
+  },
 }

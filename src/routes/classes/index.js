@@ -5,5 +5,6 @@ classesRoutes.get('/', classesController.getAll)
 classesRoutes.get('/:id', classesController.getById)
 classesRoutes.post('/', classesController.create)
 classesRoutes.put('/:id', classesController.update)
+classesRoutes.delete('/:id', classesController.delete)
 
 export default classesRoutes
