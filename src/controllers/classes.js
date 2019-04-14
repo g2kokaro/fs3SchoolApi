@@ -1,13 +1,9 @@
 import classesModel from '../models/classes'
+import util from './util.js'
 
 export default {
   getAll: async (req, res, next) => {
-    try {
-      const classes = await classesModel.getAll(next)
-      res.status(200).json(classes)
-    } catch (err) {
-      next(err)
-    }
+    util.getAll(classesModel, req, res, next)
   },
   getById: async (req, res, next) => {
     const classId = req.params.id * 1

@@ -1,13 +1,9 @@
 import teachersModel from '../models/teachers'
+import util from './util.js'
 
 export default {
   getAll: async (req, res, next) => {
-    try {
-      const teachers = await teachersModel.getAll(next)
-      res.status(200).json(teachers)
-    } catch (err) {
-      next(err)
-    }
+    util.getAll(teachersModel, req, res, next)
   },
   getById: async (req, res, next) => {
     const teacherId = req.params.id * 1
