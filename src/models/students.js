@@ -20,6 +20,23 @@ export default {
       next(err)
     }
   },
+  getClasses: async (studentId, next) => {
+    try {
+      const db = getDb()
+      let student = await db.get(SQL`SELECT * FROM students WHERE id = ${studentId}`)
+      if (!student) {
+        return `Failed to get classes. Student ${studentId} not found.`
+      }
+      return await db.all(SQL
+        `SELECT c.id, c.code, c.name, c.teacher_id, c.start_date, c.end_date
+        FROM student_classes AS s_c 
+        INNER JOIN classes as C ON s_c.class_id = c.id 
+        WHERE student_id = ${studentId}`
+      )
+    } catch (err) {
+      next(err)
+    }
+  },
   create: async (s, next) => {
     try {
       if (!(s.first_name && s.last_name)) {

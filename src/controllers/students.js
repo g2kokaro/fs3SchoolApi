@@ -12,12 +12,27 @@ export default {
   getById: async (req, res, next) => {
     const studentId = req.params.id * 1
     try {
-      const c1ass = await studentsModel.getById(studentId, next)
-      if (c1ass) {
-        res.status(200).json(c1ass)
+      const student = await studentsModel.getById(studentId, next)
+      if (student) {
+        res.status(200).json(student)
       } else {
         res.status(404).send({
           error: `Student ${studentId} not found.`
+        })
+      }
+    } catch (err) {
+      next(err)
+    }
+  },
+  getClasses: async (req, res, next) => {
+    const studentId = req.params.id * 1
+    try {
+      const dbReturnVal = await studentsModel.getClasses(studentId, next)
+      if (typeof (dbReturnVal) === 'object') {
+        res.status(200).json(classes)
+      } else {
+        res.status(404).send({
+          error: dbReturnVal
         })
       }
     } catch (err) {
@@ -65,8 +80,8 @@ export default {
   delete: async (req, res, next) => {
     const studentId = req.params.id * 1
     try {
-      const c1ass = await studentsModel.delete(studentId, next)
-      if (c1ass.stmt.changes) {
+      const student = await studentsModel.delete(studentId, next)
+      if (student.stmt.changes) {
         res.status(200).json({ message: `Student ${studentId} removed.` })
       } else {
         res.status(404).send({
