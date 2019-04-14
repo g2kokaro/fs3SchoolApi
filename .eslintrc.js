@@ -28,6 +28,12 @@ module.exports = {
         'semi': [
             'error',
             'never'
+        ],
+        'max-len': [
+            2,
+            80,
+            2,
+            { "ignoreUrls": true }
         ]
     }
 }

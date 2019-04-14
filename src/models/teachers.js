@@ -23,46 +23,44 @@ export default {
   getClasses: async (teacherId, next) => {
     try {
       const db = getDb()
-      let student = await db.get(SQL`SELECT * FROM teachers WHERE id = ${teacherId}`)
-      if (!student) {
-        return `Failed to get classes. Student ${teacherId} not found.`
+      let teacher = await db.get(SQL`SELECT * FROM teachers 
+        WHERE id = ${teacherId}`)
+      if (!teacher) {
+        return `Failed to get classes. Teacher ${teacherId} not found.`
       }
-      return await db.all(SQL`SELECT c.id, c.code, c.name, c.teacher_id, 
-        c.start_date, c.end_date
-        FROM student_classes AS s_c 
-        INNER JOIN classes as C ON s_c.class_id = c.id 
-        WHERE student_id = ${teacherId}`
+      return await db.all(SQL`SELECT * FROM classes 
+        WHERE teacher_id = ${teacherId}`
       )
     } catch (err) {
       next(err)
     }
   },
-  create: async (s, next) => {
+  create: async (t, next) => {
     try {
-      if (!(s.first_name && s.last_name)) {
-        return 'Failed to create student. Invalid format.'
+      if (!(t.first_name && t.last_name)) {
+        return 'Failed to create teacher. Invalid format.'
       }
       const db = getDb()
       return await db.run(SQL`INSERT INTO teachers (first_name, last_name)
-        VALUES (${s.first_name}, ${s.last_name})`)
+        VALUES (${t.first_name}, ${t.last_name})`)
     } catch (err) {
       next(err)
     }
   },
-  update: async (s, teacherId, next) => {
+  update: async (t, teacherId, next) => {
     try {
-      if (!(s.first_name || s.last_name)) {
-        return 'Failed to update student. Invalid format.'
+      if (!(t.first_name || t.last_name)) {
+        return 'Failed to update teacher. Invalid format.'
       }
       const db = getDb()
       let existingStudent = await db.get(
         SQL`SELECT * FROM teachers WHERE id = ${teacherId}`)
       if (!existingStudent) {
-        return 'Failed to update student. Student does not exist.'
+        return 'Failed to update teacher. Teacher does not exist.'
       }
       let dbStatement = SQL`UPDATE teachers SET `
       let keyValueString = ''
-      for (let [key, value] of Object.entries(s)) {
+      for (let [key, value] of Object.entries(t)) {
         if (['first_name', 'last_name'].indexOf(key) > -1) {
           keyValueString += `'${key}' = '${value}', `
         }
