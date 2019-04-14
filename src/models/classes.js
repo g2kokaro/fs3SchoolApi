@@ -26,18 +26,19 @@ export default {
   create: async (c, next) => {
     try {
       if (!(c.code && c.name && c.teacher_id && c.start_date && c.end_date)) {
-        return `Failed to create class. Invalid class format.`
+        return 'Failed to create class. Invalid class format.'
       }
       const db = getDb()
       let existingClass = await db.get(
         SQL`SELECT * FROM classes WHERE code = ${c.code}`
       )
       if (existingClass) {
-        return `Failed to create class. Class already exists`
+        return 'Failed to create class. Class already exists'
       }
       return await db.run(SQL`INSERT INTO classes 
         (code, name, teacher_id, start_date, end_date)
-      VALUES(${c.code}, ${c.name}, ${c.teacher_id}, ${c.start_date}, ${c.end_date})`)
+        VALUES(${c.code}, ${c.name}, ${c.teacher_id}, ${c.start_date}, 
+        ${c.end_date})`)
     } catch (err) {
       next(err)
     }
@@ -45,18 +46,19 @@ export default {
   update: async (c, classId, next) => {
     try {
       if (!(c.code || c.name || c.teacher_id || c.start_date || c.end_date)) {
-        return `Failed to update class. Invalid format.`
+        return 'Failed to update class. Invalid format.'
       }
       const db = getDb()
       let existingClass = await db.get(
         SQL`SELECT * FROM classes WHERE id=${classId}`)
       if (!existingClass) {
-        return `Failed to update class. Class does not exist.`
+        return 'Failed to update class. Class does not exist.'
       }
       let dbStatement = SQL`UPDATE classes SET `
       let keyValueString = ''
       for (let [key, value] of Object.entries(c)) {
-        if (['code', 'name', 'teacher_id', 'start_date', 'end_date'].indexOf(key) > -1) {
+        if (['code', 'name', 'teacher_id',
+          'start_date', 'end_date'].indexOf(key) > -1) {
           keyValueString += `'${key}' = '${value}', `
         }
       }

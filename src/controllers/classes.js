@@ -6,19 +6,7 @@ export default {
     util.getAll(classesModel, req, res, next)
   },
   getById: async (req, res, next) => {
-    const classId = req.params.id * 1
-    try {
-      const c1ass = await classesModel.getById(classId, next)
-      if (c1ass) {
-        res.status(200).json(c1ass)
-      } else {
-        res.status(404).send({
-          error: `Class ${classId} not found`
-        })
-      }
-    } catch (err) {
-      next(err)
-    }
+    util.getById(classesModel, req, res, next)
   },
   create: async (req, res, next) => {
     const c = {

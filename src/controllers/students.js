@@ -6,19 +6,7 @@ export default {
     util.getAll(studentsModel, req, res, next)
   },
   getById: async (req, res, next) => {
-    const studentId = req.params.id * 1
-    try {
-      const student = await studentsModel.getById(studentId, next)
-      if (student) {
-        res.status(200).json(student)
-      } else {
-        res.status(404).send({
-          error: `Student ${studentId} not found.`
-        })
-      }
-    } catch (err) {
-      next(err)
-    }
+    util.getById(studentsModel, req, res, next)
   },
   getClasses: async (req, res, next) => {
     const studentId = req.params.id * 1

@@ -13,9 +13,12 @@ export default {
   getById: async (studentId, next) => {
     try {
       const db = getDb()
-      return await db.get(
-        SQL`SELECT * FROM students WHERE id = ${studentId}`
-      )
+      let result = await db.get(SQL`SELECT * FROM students 
+        WHERE id = ${studentId}`)
+      if (!result) {
+        return 'Failed to get student. Student not found.'
+      }
+      return result
     } catch (err) {
       next(err)
     }
@@ -23,12 +26,13 @@ export default {
   getClasses: async (studentId, next) => {
     try {
       const db = getDb()
-      let student = await db.get(SQL`SELECT * FROM students WHERE id = ${studentId}`)
+      let student = await db.get(SQL`SELECT * FROM students 
+        WHERE id = ${studentId}`)
       if (!student) {
         return `Failed to get classes. Student ${studentId} not found.`
       }
-      return await db.all(SQL
-        `SELECT c.id, c.code, c.name, c.teacher_id, c.start_date, c.end_date
+      return await db.all(SQL`SELECT c.id, c.code, c.name, c.teacher_id, 
+        c.start_date, c.end_date
         FROM student_classes AS s_c 
         INNER JOIN classes as C ON s_c.class_id = c.id 
         WHERE student_id = ${studentId}`
@@ -40,7 +44,7 @@ export default {
   create: async (s, next) => {
     try {
       if (!(s.first_name && s.last_name)) {
-        return `Failed to create student. Invalid format.`
+        return 'Failed to create student. Invalid format.'
       }
       const db = getDb()
       return await db.run(SQL`INSERT INTO students (first_name, last_name)
@@ -52,13 +56,13 @@ export default {
   update: async (s, studentId, next) => {
     try {
       if (!(s.first_name || s.last_name)) {
-        return `Failed to update student. Invalid format.`
+        return 'Failed to update student. Invalid format.'
       }
       const db = getDb()
       let existingStudent = await db.get(
         SQL`SELECT * FROM students WHERE id = ${studentId}`)
       if (!existingStudent) {
-        return `Failed to update student. Student does not exist.`
+        return 'Failed to update student. Student does not exist.'
       }
       let dbStatement = SQL`UPDATE students SET `
       let keyValueString = ''
