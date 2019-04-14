@@ -1,24 +1,14 @@
+import util from './util.js'
 const SQL = require('sql-template-strings')
 const getDb = require('../db').getDb
 
 export default {
   getAll: async next => {
-    try {
-      const db = getDb()
-      return await db.all('SELECT * FROM teachers;')
-    } catch (err) {
-      next(err)
-    }
+    return util.getAll('teachers', next)
   },
   getById: async (teacherId, next) => {
-    try {
-      const db = getDb()
-      return await db.get(
-        SQL`SELECT * FROM teachers WHERE id = ${teacherId}`
-      )
-    } catch (err) {
-      next(err)
-    }
+    const query = SQL`SELECT * FROM teachers WHERE id = ${teacherId}`
+    return util.getById(query, 'teacher', next)
   },
   getClasses: async (teacherId, next) => {
     try {
