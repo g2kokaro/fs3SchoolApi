@@ -2,7 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import routes from './routes'
 const initDb = require('./db').initDb
-const port = 3000;
+const port = 3000
 const app = express()
 
 app.use(bodyParser.json())
@@ -14,7 +14,7 @@ app.use(
 
 app.use('/api', routes)
 
-initDb(err => {
+initDb(() => {
   app.listen(port, err => {
     if (err) {
       throw err

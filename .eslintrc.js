@@ -34,6 +34,7 @@ module.exports = {
             80,
             2,
             { "ignoreUrls": true }
-        ]
+        ],
+        'no-console': 'off'
     }
 }

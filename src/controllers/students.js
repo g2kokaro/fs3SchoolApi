@@ -29,7 +29,7 @@ export default {
     try {
       const dbReturnVal = await studentsModel.getClasses(studentId, next)
       if (typeof (dbReturnVal) === 'object') {
-        res.status(200).json(classes)
+        res.status(200).json(dbReturnVal)
       } else {
         res.status(404).send({
           error: dbReturnVal
@@ -45,9 +45,9 @@ export default {
     }
     try {
       const dbReturnVal = await studentsModel.create(s, next)
-      console.log(dbReturnVal)
       if (typeof (dbReturnVal) === 'object') {
-        let newStudent = await studentsModel.getById(dbReturnVal.stmt.lastID, next)
+        let newStudent =
+          await studentsModel.getById(dbReturnVal.stmt.lastID, next)
         res.status(201).json(newStudent)
       } else {
         res.status(400).send({
