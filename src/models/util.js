@@ -1,5 +1,4 @@
 const getDb = require('../db').getDb
-const SQL = require('sql-template-strings')
 
 export default {
   getAll: async (tableName, next) => {
