@@ -22,6 +22,7 @@ export const initDb = cb => {
       })
     )
     .then(db => {
+      db.run("PRAGMA foreign_keys = on;")
       console.log('DB Initialized')
       _db = db
       return cb(null, _db)
